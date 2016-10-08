@@ -1,8 +1,11 @@
 #include <regex.h>
 #include <stdlib.h>
+#include <string.h>
 
+#include "matcher.h"
 #include "common.h"
 
+/* helper that compiles a regex from a pattern */
 static regex_t* regex_make(const char* regex, int cflags){
 	regex_t* matcher = (regex_t*) xmalloc(sizeof(regex_t));
 
@@ -14,11 +17,6 @@ static regex_t* regex_make(const char* regex, int cflags){
 	return matcher;
 }
 
-struct match_t {
-	char* start;
-	int len;
-};
-
 struct matcher_t{
 	size_t mcap;
 	match_t* matches;
@@ -28,13 +26,15 @@ struct matcher_t{
 	regmatch_t* groups;
 };
 
+/* required for opaque type */
 matcher_t* matcher_new(){
-	return (matcher_t*) malloc(sizeof(matcher_t));
+	return (matcher_t*) xmalloc(sizeof(matcher_t));
 }
 
 void matcher_make(matcher_t* self, char* pattern, int cflags){
 	self->regex = regex_make(pattern, REG_EXTENDED | cflags);
 
+	/* number of groups detected, plus one for entire match */
 	size_t nsub = self->regex->re_nsub;
 	self->groups = (regmatch_t*) xmalloc((nsub + 1) * sizeof(regmatch_t));
 	self->mcap = nsub;
@@ -104,9 +104,10 @@ void matcher_match_line(matcher_t* self, const char* slice,const int len, int ef
 
 
 match_t* matcher_match_get(matcher_t* self, size_t idx){
-	if(self->mcap<=idx){
+	/* out of bounds? */
+	if(self->mcap <= idx || idx<0){
 		return NULL;
 	}
 
-	return &(self->matches[idx])
+	return &(self->matches[idx]);
 }

@@ -1,6 +1,6 @@
 
 TARGET = trex
-SRC = main.c lr.c
+SRC = main.c lr.c common.c matcher.c
 
 all: $(TARGET)
 
