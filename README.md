@@ -3,7 +3,8 @@
 similar to `grep`. The main difference is that it only shows the matching
 groups of a regular expressions.
 
-This allows simple parsing out of values from text with some context.
+This allows simple parsing out of values from text while still requiring more context than just the match of the value.
+While `sed` and `awk` can also do this, I never manage to remember the syntax.
 
 This utility uses the UNIX/POSIX regex.h implementation of pattern matcher,
 therefore POSIX syntax applies for provided patterns.
