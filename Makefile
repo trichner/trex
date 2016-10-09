@@ -4,6 +4,8 @@
 TARGET = trex
 SRC = main.c lr.c common.c matcher.c
 
+INSTALL_DST=/usr/bin/trex
+
 all: $(TARGET)
 
 clean: 
@@ -14,11 +16,17 @@ format: $(addsuffix .format, $(SRC))
 debug:
 	gdbtui $(TARGET)
 
+install: $(TARGET)
+	install $< $(INSTALL_DST)
+
+uninstall:
+	rm -f $(INSTALL_DST)
+
 $(TARGET): $(SRC)
-	gcc -ggdb -o $@ $^
+	gcc -o $@ $^
 
 %.format: %
 	clang-format $< | sponge $<
 	
 
-.PHONY: all clean format
+.PHONY: all clean format install uninstall
