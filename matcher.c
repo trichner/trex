@@ -34,6 +34,9 @@ void matcher_make(matcher_t *self, char *pattern, int cflags) {
 
   /* number of groups detected, plus one for entire match */
   size_t nsub = self->regex->re_nsub;
+  if(!nsub){
+    panic("No groups found.");
+  }
   self->groups = (regmatch_t *)xmalloc((nsub + 1) * sizeof(regmatch_t));
   self->mcap = nsub;
 
@@ -41,7 +44,11 @@ void matcher_make(matcher_t *self, char *pattern, int cflags) {
 }
 
 void matcher_match_reset(matcher_t *self) {
-  free(self->line);
+  if(self->line){
+    free(self->line);
+  }
+  self->line = NULL;
+
   int i;
   for (i = 0; i < self->mcap; i++) {
     self->matches[i].start = NULL;
@@ -103,7 +110,7 @@ void matcher_match_line(matcher_t *self, const char *slice, const int len,
 
 match_t *matcher_match_get(matcher_t *self, size_t idx) {
   /* out of bounds? */
-  if (self->mcap <= idx || idx < 0) {
+  if (self->mcap <= idx) {
     return NULL;
   }
 

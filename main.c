@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 
   /* read file line-by-line */
   lr_init(lr, f);
-  while (line = lr_next(lr, &len)) {
+  while ((line = lr_next(lr, &len))) {
 
     /* exec regex */
     matcher_match_line(matcher, line, len, 0);
@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
     match_t *match;
 
     int i = 0;
-    while (match = matcher_match_get(matcher, i)) {
+    while ((match = matcher_match_get(matcher, i))) {
       if (match->start) {
         if (nmatches) {
           printf(" ");
