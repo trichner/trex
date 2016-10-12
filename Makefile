@@ -4,7 +4,7 @@
 TARGET = trex
 SRC = main.c lr.c common.c matcher.c
 
-INSTALL_DST=/usr/bin/trex
+DESTDIR=/usr/local/bin/trex
 
 all: $(TARGET)
 
@@ -16,14 +16,17 @@ format: $(addsuffix .format, $(SRC))
 debug:
 	gdbtui $(TARGET)
 
+debug-lldb:
+	lldb $(TARGET)
+
 install: $(TARGET)
-	install $< $(INSTALL_DST)
+	install $< $(DESTDIR)
 
 uninstall:
-	rm -f $(INSTALL_DST)
+	rm -f $(DESTDIR)
 
 $(TARGET): $(SRC)
-	gcc -o $@ $^
+	gcc -g -o $@ $^
 
 %.format: %
 	clang-format $< | sponge $<
