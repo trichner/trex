@@ -6,7 +6,7 @@ assert () {
 DIFF=$(diff <(echo $1) <(echo $2))
 
 echo "==========="
-
+echo "$1"
 if [ -z "$DIFF" ]
 then
 	echo "SUCCESS"

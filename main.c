@@ -23,8 +23,13 @@
 #include "common.h"
 #include "lr.h"
 #include "matcher.h"
+//#include "ftree_matcher.h"
+
 
 int main(int argc, char **argv) {
+
+  char** path_list = xmalloc(2*sizeof(char*));
+  path_list[0] = "/home/trichner/tdot";
 
   if (argc <= 1) {
     panic("No pattern provided.\nUsage: trex <pattern> [file]");
@@ -34,12 +39,27 @@ int main(int argc, char **argv) {
   matcher_t *matcher = matcher_new();
   matcher_make(matcher, argv[1], 0);
 
+  if(argc >= 3 && strcmp(argv[2],"-")!= 0){
+    match_file(argv[2], matcher);
+  }else{
+    match_file(NULL, matcher);
+  }
+
+  matcher_free(matcher);
+  free(matcher);
+
+  return 0;
+}
+
+int match_file(const char* path, matcher_t* matcher){
+
   line_reader_t *lr = lr_new();
   FILE *f;
   size_t len;
   char *line;
-  if (argc >= 3) {
-    f = fopen(argv[2], "r");
+
+  if (path) {
+    f = fopen(path, "r");
     if (f == NULL) {
       panic("Cannot open file.");
     }
@@ -84,8 +104,4 @@ int main(int argc, char **argv) {
   lr_free(lr);
   free(lr);
 
-  matcher_free(matcher);
-  free(matcher);
-
-  return 0;
 }

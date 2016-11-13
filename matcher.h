@@ -1,4 +1,5 @@
-
+#ifndef MATCHER_H
+#define MATCHER_H
 
 typedef struct {
 	char* start;
@@ -24,3 +25,5 @@ void matcher_match_line(matcher_t* self, const char* slice,const int len, int ef
 
 /* returns the match at index idx or null if out of bounds */
 match_t* matcher_match_get(matcher_t* self, size_t idx);
+
+#endif

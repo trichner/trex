@@ -2,7 +2,7 @@
 # Requires 'moretutils', 'gcc', 'clang-format', 'gdbtui'
 
 TARGET = trex
-SRC = main.c lr.c common.c matcher.c
+SRC = main.c lr.c common.c matcher.c ftree_matcher.c
 
 DESTDIR=/usr/local/bin/trex
 
